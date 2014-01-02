@@ -21,14 +21,14 @@ bool AbsService::autoconnect(QObject *target) {
           i < serviceMetaObject->methodCount();
           i++ ) {
         QMetaMethod method = serviceMetaObject->method(i);
-        QByteArray nsignature = QMetaObject::normalizedSignature(method.signature());
+        QByteArray nsignature = QMetaObject::normalizedSignature(method.methodSignature());
         if ( method.methodType() == QMetaMethod::Signal ) {
             int pairIndx = targetMetaObject->indexOfSlot(nsignature);
             if (pairIndx == -1) {
                 res = false;
                 qWarning("qrs::AbsService::autoconnect: failed to find pair for the signal %s::%s",
                          serviceMetaObject->className(),
-                         method.signature());
+                         method.methodSignature().constData());
                 continue;
             }
             QMetaMethod pair = targetMetaObject->method(pairIndx);
@@ -37,9 +37,9 @@ bool AbsService::autoconnect(QObject *target) {
                 res = false;
                 qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
                          serviceMetaObject->className(),
-                         method.signature(),
+                         method.methodSignature().constData(),
                          targetMetaObject->className(),
-                         pair.signature());
+                         pair.methodSignature().constData());
                 continue;
             }
 #else
@@ -70,7 +70,7 @@ bool AbsService::autoconnect(QObject *target) {
                 res = false;
                 qWarning("qrs::AbsService::autoconnect: failed to find pair for the slot %s::%s",
                          serviceMetaObject->className(),
-                         method.signature());
+                         method.methodSignature().constData());
                 continue;
             }
             QMetaMethod pair = targetMetaObject->method(pairIndx);
@@ -79,9 +79,9 @@ bool AbsService::autoconnect(QObject *target) {
                 res = false;
                 qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
                          targetMetaObject->className(),
-                         pair.signature(),
+                         pair.methodSignature().constData(),
                          serviceMetaObject->className(),
-                         method.signature());
+                         method.methodSignature().constData());
                 continue;
             }
 #else
