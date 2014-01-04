@@ -10,6 +10,9 @@
 
 #include <QtCore/QtGlobal>
 
+#ifdef QRS_STATIC
+#define QRS_EXPORT
+#else // QRS_STATIC
 #ifdef QRS_SHARED
 // we are building shared library
 #define QRS_EXPORT Q_DECL_EXPORT
@@ -17,5 +20,6 @@
 // we are using shared library
 #define QRS_EXPORT Q_DECL_IMPORT
 #endif
+#endif // QRS_STATIC
 
 #endif
